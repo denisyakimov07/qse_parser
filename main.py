@@ -28,7 +28,7 @@ def creat_chrome():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path="/app/.chromedriver/bin/chromedriver", options=chrome_options)
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
     return driver
 
 
@@ -46,7 +46,13 @@ def save_news(url, company_tag):
     if not session.query(QSENews).filter(QSENews.news_url == url).first():
         print(url)
         text_body = ''
-        driver = creat_chrome()
+        chrome_options = Options()
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+
         driver.get(url)
         WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "DisplayNewsDetails_main_div")))
         innerHTML = driver.execute_script("return document.documentElement.outerHTML")
@@ -82,7 +88,12 @@ def save_news(url, company_tag):
 
 def get_company_tags():
     company_list_url = "https://qe.com.qa/en/web/guest/listed-companies"
-    driver = creat_chrome()
+    chrome_options = Options()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
     driver.get(company_list_url)
     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "div1")))
     innerHTML = driver.execute_script("return document.documentElement.outerHTML")
@@ -97,7 +108,12 @@ def get_company_tags():
 
 def get_company_news_list(url):
     news_url_list = []
-    driver = creat_chrome()
+    chrome_options = Options()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
     driver.get(url)
     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "news-content")))
     innerHTML = driver.execute_script("return document.documentElement.outerHTML")
@@ -110,14 +126,6 @@ def get_company_news_list(url):
 
 
 print("start scraping")
-
-# op = webdriver.ChromeOptions()
-# op.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-# op.add_argument("--headless")
-# op.add_argument("--no-sandbox")
-# op.add_argument("--disable-dev-sh-usage")
-# driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=op)
-# print(driver.page_source)
 
 
 for tag in get_company_tags():
