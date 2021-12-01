@@ -12,19 +12,13 @@ from sqlalchemy import create_engine
 from environment import get_env
 from models_qse_news import QSENews
 
-DATABSE_URI = f'{get_env().DB_DATABASE_TYPE}://{get_env().DB_USER}'\
-              f':{get_env().DB_PASSWORD}@{get_env().DB_HOST}'\
+DATABSE_URI = f'{get_env().DB_DATABASE_TYPE}://{get_env().DB_USER}' \
+              f':{get_env().DB_PASSWORD}@{get_env().DB_HOST}' \
               f':{get_env().DB_PORT}/{get_env().DB_DATABASE}'
 
-
 engine = create_engine(DATABSE_URI, echo=False)
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(bind=engine)
 session = Session()
-
-
-
-
-
 
 
 def creat_chrome():
@@ -48,7 +42,7 @@ def creat_chrome():
 
 
 def save_news(url, company_tag):
-    if not session.query(QSENews).filter(QSENews.news_url==url).first():
+    if not session.query(QSENews).filter(QSENews.news_url == url).first():
         text_body = ''
         driver = creat_chrome()
         driver.get(url)
@@ -68,8 +62,9 @@ def save_news(url, company_tag):
 
         news_body = soup.find(class_="p-18")
         for i in news_body.next_siblings:
-            text_body = text_body + (str(i.text).replace("Click here to download attachment", '').replace("n\\", '').strip().replace(" ", ''))
-
+            text_body = text_body + (
+                str(i.text).replace("Click here to download attachment", '').replace("n\\", '').strip().replace(" ",
+                                                                                                                ''))
 
         add_news = QSENews()
         add_news.company_title = company_tag
@@ -82,6 +77,7 @@ def save_news(url, company_tag):
         session.commit()
         return
 
+
 def get_company_tags():
     company_list_url = "https://qe.com.qa/en/web/guest/listed-companies"
     driver = creat_chrome()
@@ -89,7 +85,7 @@ def get_company_tags():
     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "div1")))
     innerHTML = driver.execute_script("return document.documentElement.outerHTML")
     soup = BeautifulSoup(innerHTML, 'lxml')
-    tags  = soup.find_all("p", class_="companyCode")
+    tags = soup.find_all("p", class_="companyCode")
     tags_list = []
     for i in tags:
         tags_list.append(i.text)
@@ -111,14 +107,7 @@ def get_company_news_list(url):
     return news_url_list
 
 
-
 for tag in get_company_tags():
     thread_list = []
     for news_url in get_company_news_list(f"https://qe.com.qa/en/companymoreinformationsearch?CompanyCode={tag}"):
         save_news(news_url, tag)
-
-
-
-
-
-
