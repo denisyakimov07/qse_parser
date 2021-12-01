@@ -107,8 +107,7 @@ def get_company_news_list(url):
 
     return news_url_list
 
-if __name__ == '__main__':
-    for tag in get_company_tags():
-        thread_list = []
-        for news_url in get_company_news_list(f"https://qe.com.qa/en/companymoreinformationsearch?CompanyCode={tag}"):
-            save_news(news_url, tag)
+
+for tag in get_company_tags():
+    for news_url in get_company_news_list(f"https://qe.com.qa/en/companymoreinformationsearch?CompanyCode={tag}"):
+        save_news(news_url, tag)
