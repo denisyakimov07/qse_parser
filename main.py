@@ -43,6 +43,7 @@ def creat_chrome():
 
 def save_news(url, company_tag):
     if not session.query(QSENews).filter(QSENews.news_url == url).first():
+        print(url)
         text_body = ''
         driver = creat_chrome()
         driver.get(url)
