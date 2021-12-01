@@ -46,13 +46,7 @@ def save_news(url, company_tag):
     if not session.query(QSENews).filter(QSENews.news_url == url).first():
         print(url)
         text_body = ''
-        chrome_options = Options()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-
+        driver = creat_chrome()
         driver.get(url)
         WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "DisplayNewsDetails_main_div")))
         innerHTML = driver.execute_script("return document.documentElement.outerHTML")
@@ -88,12 +82,7 @@ def save_news(url, company_tag):
 
 def get_company_tags():
     company_list_url = "https://qe.com.qa/en/web/guest/listed-companies"
-    chrome_options = Options()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    driver = creat_chrome()
     driver.get(company_list_url)
     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "div1")))
     innerHTML = driver.execute_script("return document.documentElement.outerHTML")
@@ -108,12 +97,7 @@ def get_company_tags():
 
 def get_company_news_list(url):
     news_url_list = []
-    chrome_options = Options()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    driver = creat_chrome()
     driver.get(url)
     WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.ID, "news-content")))
     innerHTML = driver.execute_script("return document.documentElement.outerHTML")
