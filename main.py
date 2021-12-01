@@ -110,6 +110,16 @@ def get_company_news_list(url):
 
 
 print("start scraping")
+
+op = webdriver.ChromeOptions()
+op.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+op.add_argument("--headless")
+op.add_argument("--no-sandbox")
+op.add_argument("--disable-dev-sh-usage")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=op)
+print(driver.page_source)
+
+
 for tag in get_company_tags():
     for news_url in get_company_news_list(f"https://qe.com.qa/en/companymoreinformationsearch?CompanyCode={tag}"):
         save_news(news_url, tag)
