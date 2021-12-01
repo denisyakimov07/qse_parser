@@ -108,6 +108,7 @@ def get_company_news_list(url):
     return news_url_list
 
 
+print("start scraping")
 for tag in get_company_tags():
     for news_url in get_company_news_list(f"https://qe.com.qa/en/companymoreinformationsearch?CompanyCode={tag}"):
         save_news(news_url, tag)
