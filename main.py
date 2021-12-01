@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 import os
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
 
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
@@ -28,7 +29,8 @@ def creat_chrome():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(service=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    s = Service(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
+    driver = webdriver.Chrome(Service=s, options=chrome_options)
     return driver
 
 
