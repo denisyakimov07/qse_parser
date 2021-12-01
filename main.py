@@ -1,5 +1,6 @@
 import datetime
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from sqlalchemy.orm import sessionmaker
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -22,7 +23,7 @@ session = Session()
 
 
 def creat_chrome():
-    chrome_options = webdriver.ChromeOptions()
+    chrome_options = Options()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
